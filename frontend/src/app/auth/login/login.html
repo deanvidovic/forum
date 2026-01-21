@@ -1,0 +1,54 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <form 
+        [formGroup]="loginForm" 
+        (ngSubmit)="onSubmit()"
+        class="bg-white p-6 rounded-xl shadow-md w-96"
+    >
+        <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
+
+        <input
+            type="email"
+            formControlName="email"
+            placeholder="josh.rock@gmail.com"
+            class="w-full p-2 border border-gray-300 rounded mt-2 mb-2 outline-none focus:border-black focus:ring-0 transition-all"
+            [class.border-red-500]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+        />
+        <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+            class="text-red-500 text-sm">
+            Invalid e-mail address.
+        </p>
+
+        <div class="relative w-full">
+            <input
+                [type]="hidePassword ? 'password' : 'text'"
+                formControlName="password"
+                placeholder="Password"
+                class="w-full p-2 pr-10 border border-gray-300 rounded mt-2 mb-2 outline-none focus:border-black focus:ring-0 transition-all"
+                [class.border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            />
+            
+            <button type="button" (click)="hidePassword = !hidePassword" class="absolute right-3 top-[55%] -translate-y-1/2 text-gray-500 hover:text-black cursor-pointer focus:outline-none" >
+                <lucide-icon [name]="hidePassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+            </button>
+        </div>
+        <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            class="text-red-500 text-sm">
+            You must enter the password.
+        </p>
+
+        <button 
+            type="submit" 
+            [disabled]="loginForm.invalid"
+            class="w-full bg-blue-600 text-white p-2 rounded mt-2 hover:bg-blue-700 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+        > 
+            Log in
+        </button>
+
+        <p class="text-sm text-center mt-3">
+            You don't have an account?
+            <a routerLink="/register" class="text-blue-600 underline cursor-pointer">
+                Register
+            </a>
+        </p>
+    </form>
+</div>
