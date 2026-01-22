@@ -6,12 +6,14 @@ const validateRegister = (req, res, next) => {
 
     if (!username || username.length <= 3) {
         return res.status(400).json({
+            status: 'error',
             message: 'Username must be at least 3 characters long.'
         })
     }
     
     if (!isValidEmail(email)) {
         return res.status(400).json({
+            status: 'error',
             message: 'Invalid e-mail address.'
         })
     }
@@ -20,6 +22,7 @@ const validateRegister = (req, res, next) => {
 
     if (passwordErrors.length > 0) {
         return res.status(400).json({
+            status: 'error',
             message: 'Password does not meet requirements.',
             details: passwordErrors
         })
@@ -40,12 +43,14 @@ const isUserUnique = async (req, res, next) => {
         if (existingUser) {
             if (existingUser.email === email) {
                 return res.status(409).json({
+                    status: 'error',
                     message: 'E-mail is already registered.'
                 })
             }
 
             if (existingUser.username === username) {
                 return res.status(409).json({
+                    status: 'error',
                     message: 'Username is already registered.'
                 })
             }
@@ -54,6 +59,7 @@ const isUserUnique = async (req, res, next) => {
         next();
     } catch (error) {
         res.status(500).json({
+            status: 'error',
             message: 'Database error during uniqueness check.'
         })
     }

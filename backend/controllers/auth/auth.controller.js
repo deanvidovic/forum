@@ -19,12 +19,13 @@ const register = async (req, res) => {
         );
 
         return res.status(201).json({
+            status: 'success',
             message: 'Registration successful.'
         });
 
     } catch (error) {
         res.status(500).json(
-            { error: "We are not able to register you right now. Please try again later." }
+            { status: 'error', message: "We are not able to register you right now. Please try again later." }
         );
     }
 };

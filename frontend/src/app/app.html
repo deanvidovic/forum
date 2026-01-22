@@ -1,1 +1,10 @@
+<div *ngIf="dialog.dialogState$ | async as dialog">
+  <div *ngIf="dialog.show" 
+       class="fixed top-5 left-1/2 z-[9999] min-w-[300px] px-6 py-3 rounded-md shadow-lg font-medium text-white text-center animate-toast"
+       [ngClass]="dialog.type === 'Success' ? 'bg-emerald-600' : 'bg-rose-600'">
+    
+    {{ dialog.message }}
+    
+  </div>
+</div>
 <router-outlet></router-outlet>

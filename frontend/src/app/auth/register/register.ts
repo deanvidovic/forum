@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { email } from '@angular/forms/signals';
-
+import { Auth } from '../../services/auth';
+import { Router } from '@angular/router';
+import { Dialog } from '../../services/dialog';
 
 @Component({
   selector: 'app-register',
@@ -26,7 +27,7 @@ export class Register {
     return null;
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private authService: Auth, private router: Router, private dialog: Dialog) {
     this.registerForm = fb.group({
       username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -39,7 +40,25 @@ export class Register {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log('Slanje na backend:', this.registerForm.value);
+      
+      this.authService.register(this.registerForm.value).subscribe({
+        next: (res) => {
+          console.log(res.message);
+          this.dialog.show(res.message, 'Success');
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          const msg = err.error.message;
+
+          if (err.error.details && err.error.details.length > 0) {
+            const fullMessage = `${msg}: ${err.error.details.join(' ')}`;
+            this.dialog.show(fullMessage, 'Error');
+          } else {
+            this.dialog.show(msg, 'Error');
+          }``
+        }
+      })
+
     } else {
       this.registerForm.markAllAsTouched();
     }
