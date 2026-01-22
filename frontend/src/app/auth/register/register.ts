@@ -55,7 +55,7 @@ export class Register {
             this.dialog.show(fullMessage, 'Error');
           } else {
             this.dialog.show(msg, 'Error');
-          }``
+          }
         }
       })
 

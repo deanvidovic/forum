@@ -46,7 +46,8 @@ const login = async (req, res) => {
             token: token,
             user: {
                 id: user.id,
-                username: user.username
+                username: user.username,
+                role: user.role
             }
         });
     } catch (error) {
