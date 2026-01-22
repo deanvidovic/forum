@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -25,4 +27,9 @@ const getPasswordErrors = (password) => {
     return errors;
 };
 
-module.exports = { getPasswordErrors, isValidEmail }
+const compareUserPassword = async (passowrdHash, password) => {
+    if (!passowrdHash) return false;
+    return await bcrypt.compare(password, passowrdHash);
+}
+
+module.exports = { getPasswordErrors, isValidEmail, compareUserPassword }

@@ -1,5 +1,7 @@
 const db = require('../../db');
-const { isValidEmail, getPasswordErrors } = require('../../utils/validators');
+const { isValidEmail, getPasswordErrors } = require('../../utils/authValidator');
+
+// register validation
 
 const validateRegister = (req, res, next) => {
     const { username, email, password } = req.body;
@@ -65,4 +67,27 @@ const isUserUnique = async (req, res, next) => {
     }
 };
 
-module.exports = { validateRegister, isUserUnique };
+// login validation
+
+const validateLogin = (req, res, next) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Email and password are required.'
+        });
+    }
+
+    if (!isValidEmail(email)) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Invalid e-mail address.'
+        })
+    }
+
+    next();
+};
+
+
+module.exports = { validateRegister, isUserUnique, validateLogin };

@@ -1,9 +1,61 @@
+require('dotenv').config();
 const db = require('../../db');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { compareUserPassword } = require('../../utils/authValidator');
 
 
 const login = async (req, res) => {
+    const { email, password } = req.body;
 
+    try {
+        const user = await db.oneOrNone(
+            `SELECT id, username, password_hash, role FROM users WHERE email = $1`,
+            [email]
+        )
+
+        if (!user) {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Invalid e-mail or password.'
+            })
+        }
+
+        const isValid = await compareUserPassword(user.password_hash, password);
+
+        if (!isValid) {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Invalid e-mail or password.'
+            })
+        } 
+
+        const token = jwt.sign(
+            {
+                id: user.id,
+                username: user.username,
+                role: user.role
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '3d' }
+        )
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Login successful!',
+            token: token,
+            user: {
+                id: user.id,
+                username: user.username
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(401).json({
+            status: 'error',
+            message: 'We are not able to login you right now. Please try again later.'
+        })
+    }
 };
 
 const register = async (req, res) => {
