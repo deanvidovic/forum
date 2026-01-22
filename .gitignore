@@ -1,0 +1,26 @@
+# Dependency directories (pokriva i frontend/node_modules i backend/node_modules)
+node_modules/
+**/node_modules/
+
+# Environment variables (jako bitno za backend .env datoteke!)
+.env
+.env.local
+.env.*
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Angular specifično (za tvoj frontend)
+.angular/
+dist/
+/tmp/
+
+# Operativni sustavi
+.DS_Store
+Thumbs.db
+
+# IDE specifično
+.vscode/
+.idea/
