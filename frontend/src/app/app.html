@@ -1,10 +1,52 @@
 <div *ngIf="dialog.dialogState$ | async as dialog">
-  <div *ngIf="dialog.show" 
-       class="fixed top-5 left-1/2 z-[9999] min-w-[300px] px-6 py-3 rounded-md shadow-lg font-medium text-white text-center animate-toast"
-       [ngClass]="dialog.type === 'Success' ? 'bg-emerald-600' : 'bg-rose-600'">
-    
+  <div *ngIf="dialog.show"
+    class="fixed top-2 left-1/2 z-[9999] min-w-[300px] px-6 py-3 rounded-md shadow-lg font-medium text-white text-center animate-toast"
+    [ngClass]="dialog.type === 'Success' ? 'bg-emerald-600' : 'bg-rose-600'">
+
     {{ dialog.message }}
-    
+
   </div>
 </div>
-<router-outlet></router-outlet>
+<div class="min-h-screen bg-[#0b0f1a] text-slate-300 font-sans selection:bg-indigo-500/30">
+
+  <nav *ngIf="showNavbar()"
+    class="sticky top-0 z-50 bg-[#111827]/80 backdrop-blur-md border-b border-slate-800 px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-6">
+      <h1 routerLink="/home" class="text-xl font-black text-white tracking-tighter cursor-pointer">
+        &lt; Null<span class="text-indigo-500">Pointer</span> /&gt;
+      </h1>
+
+    </div>
+
+    <div class="flex items-center gap-4">
+      <div routerLink="/home" class="flex items-center gap-3 pr-4 cursor-pointer group">
+        <div class="text-right hidden sm:block">
+          <p class="text-xs font-bold text-white group-hover:text-indigo-400 transition">Forum</p>
+        </div>
+      </div>
+      <div *ngIf="currentUser" routerLink="/profile"
+        class="flex items-center gap-3 pr-4 border-r border-slate-800 cursor-pointer group">
+        <div class="text-right hidden sm:block">
+          <p class="text-xs font-bold text-white group-hover:text-indigo-400 transition">
+            @{{ currentUser.username }}
+          </p>
+        </div>
+
+        <div
+          class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold border border-white/10 shadow-lg shadow-indigo-500/20 transition-transform active:scale-90">
+          {{ getInitial() }}
+        </div>
+      </div>
+
+      <button title="Odjava" (click)="onLogout()"
+        class="p-2 text-slate-500 hover:text-red-400 transition-colors duration-200 cursor-pointer">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+  <router-outlet></router-outlet>
+
+</div>

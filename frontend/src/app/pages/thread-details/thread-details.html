@@ -1,0 +1,105 @@
+<div *ngIf="loading" class="flex flex-col items-center justify-center py-20 gap-4">
+  <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+  <p class="text-slate-500 font-mono text-[10px] uppercase tracking-widest animate-pulse">Učitavanje podataka...</p>
+</div>
+
+<div *ngIf="!loading && thread" class="max-w-4xl mx-auto py-10 px-4 space-y-8 animate-in fade-in duration-500">
+  
+  <button (click)="goBack()" class="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest cursor-pointer group">
+    <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    Natrag
+  </button>
+
+  <article class="bg-[#111827] border border-slate-700/50 rounded-3xl p-8 shadow-2xl ring-1 ring-white/5">
+    <div class="flex items-center gap-3 mb-6">
+      <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded uppercase font-bold tracking-tighter">
+        {{ thread.category_name }}
+      </span>
+      <span class="text-[10px] text-slate-600 font-bold uppercase tracking-wider">• {{ thread.created_at | timeAgo }}</span>
+    </div>
+
+    <h1 class="text-3xl font-black text-white mb-6 leading-tight">
+      {{ thread.title }}
+    </h1>
+
+    <div class="text-slate-300 leading-relaxed mb-8 whitespace-pre-wrap text-lg">
+      {{ thread.content }}
+    </div>
+
+    <div class="flex items-center justify-between pt-6 border-t border-slate-800">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-400 flex items-center justify-center font-bold text-white shadow-lg uppercase">
+          {{ thread.username[0] }}
+        </div>
+        <div>
+          <p class="text-sm font-bold text-white">@{{ thread.username }}</p>
+          <p class="text-[10px] text-slate-500 uppercase font-bold">Autor objave</p>
+        </div>
+      </div>
+      
+      <button (click)="onLike()" 
+        class="flex items-center gap-2 px-6 py-2.5 rounded-xl transition-all cursor-pointer group active:scale-90 border"
+        [class.bg-rose-500/10]="thread.isLiked"
+        [class.border-rose-500/50]="thread.isLiked"
+        [class.bg-slate-800/50]="!thread.isLiked"
+        [class.border-slate-700/50]="!thread.isLiked">
+        
+        <svg class="w-5 h-5 transition-all" 
+             [class.text-rose-500]="thread.isLiked" 
+             [class.fill-rose-500]="thread.isLiked"
+             [class.text-slate-400]="!thread.isLiked"
+             [class.fill-none]="!thread.isLiked"
+             stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+        <span class="text-sm font-bold" [class.text-rose-400]="thread.isLiked" [class.text-slate-300]="!thread.isLiked">
+          {{ thread.likes_count || 0 }}
+        </span>
+      </button>
+    </div>
+  </article>
+
+  <section class="space-y-6">
+    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-[0.2em] flex items-center gap-3">
+      Rasprava <span class="text-indigo-500">({{ thread.comments?.length || 0 }})</span>
+    </h3>
+
+    <div class="bg-[#111827]/50 border border-dashed border-slate-700 rounded-2xl p-4 focus-within:border-indigo-500/50 transition-colors">
+      <textarea [(ngModel)]="commentContent" placeholder="Napiši svoje mišljenje ili odgovor..." rows="3"
+        class="w-full bg-transparent border-none text-sm text-white outline-none placeholder:text-slate-600 resize-none"></textarea>
+      <div class="flex justify-end mt-2">
+        <button (click)="submitComment()" [disabled]="!commentContent.trim()"
+          class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20 cursor-pointer">
+          Pošalji odgovor
+        </button>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <div *ngFor="let comment of thread.comments" class="bg-[#111827] border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-[10px] font-bold text-indigo-400 border border-slate-700 uppercase">
+            {{ comment.username[0] }}
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-white">
+                @{{ comment.username }} 
+                <span class="text-slate-600 font-normal ml-2 text-[10px] uppercase tracking-tighter">{{ comment.created_at | timeAgo }}</span>
+              </span>
+            </div>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              {{ comment.content }}
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="thread.comments?.length === 0" class="text-center py-10 bg-slate-900/20 rounded-2xl border border-slate-800/50 border-dashed">
+          <p class="text-slate-600 text-xs uppercase tracking-widest font-bold">Tišina u dvorani... Budi prvi koji će progovoriti!</p>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,54 +1,82 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <form 
-        [formGroup]="loginForm" 
-        (ngSubmit)="onSubmit()"
-        class="bg-white p-6 rounded-xl shadow-md w-96"
-    >
-        <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
-
-        <input
-            type="email"
-            formControlName="email"
-            placeholder="josh.rock@gmail.com"
-            class="w-full p-2 border border-gray-300 rounded mt-2 mb-2 outline-none focus:border-black focus:ring-0 transition-all"
-            [class.border-red-500]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-        />
-        <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-            class="text-red-500 text-sm">
-            Invalid e-mail address.
-        </p>
-
-        <div class="relative w-full">
-            <input
-                [type]="hidePassword ? 'password' : 'text'"
-                formControlName="password"
-                placeholder="Password"
-                class="w-full p-2 pr-10 border border-gray-300 rounded mt-2 mb-2 outline-none focus:border-black focus:ring-0 transition-all"
-                [class.border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-            />
-            
-            <button type="button" (click)="hidePassword = !hidePassword" class="absolute right-3 top-[55%] -translate-y-1/2 text-gray-500 hover:text-black cursor-pointer focus:outline-none" >
-                <lucide-icon [name]="hidePassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
-            </button>
+<div class="min-h-screen flex items-center justify-center bg-[#0b0f1a] selection:bg-indigo-500/30">
+    <div class="max-w-md w-full px-6">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-black text-white tracking-tighter">
+                &lt; Null<span class="text-indigo-500">Pointer</span> /&gt;
+            </h1>
         </div>
-        <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-            class="text-red-500 text-sm">
-            You must enter the password.
-        </p>
 
-        <button 
-            type="submit" 
-            [disabled]="loginForm.invalid"
-            class="w-full bg-blue-600 text-white p-2 rounded mt-2 hover:bg-blue-700 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-        > 
-            Log in
-        </button>
+        <form 
+            [formGroup]="loginForm" 
+            (ngSubmit)="onSubmit()"
+            class="bg-[#111827] p-8 rounded-2xl shadow-2xl border border-slate-800 relative overflow-hidden"
+        >
+            <div class="absolute -top-10 -right-10 w-24 h-24 bg-indigo-600/10 blur-3xl rounded-full"></div>
 
-        <p class="text-sm text-center mt-3">
-            You don't have an account?
-            <a routerLink="/register" class="text-blue-600 underline cursor-pointer">
-                Register
-            </a>
-        </p>
-    </form>
+            <h2 class="text-xl font-bold mb-6 text-white flex items-center gap-2">
+                <span class="w-1.5 h-5 bg-indigo-500 rounded-full"></span>
+                Prijavi se u sustav
+            </h2>
+
+            <div class="mb-5">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 pr-1">Email adresa</label>
+                <input
+                    type="email"
+                    formControlName="email"
+                    placeholder="dev@nullpointer.hr"
+                    class="w-full p-3.5 bg-[#0b0f1a] border border-slate-700 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-slate-200 placeholder:text-slate-600"
+                    [class.border-red-500/50]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                />
+                <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                    class="text-red-400 text-[13px] mt-1.5 font-medium ml-1">
+                    Molimo unesite ispravnu email adresu.
+                </p>
+            </div>
+
+            <div class="mb-8">
+                <div class="flex justify-between items-end mb-2">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider pr-1">Lozinka</label>
+                </div>
+                <div class="relative w-full">
+                    <input
+                        [type]="hidePassword ? 'password' : 'text'"
+                        formControlName="password"
+                        placeholder="••••••••"
+                        class="w-full p-3.5 bg-[#0b0f1a] border border-slate-700 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-slate-200 placeholder:text-slate-600"
+                        [class.border-red-500/50]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                    />
+                    
+                    <button type="button" (click)="hidePassword = !hidePassword" 
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-indigo-400 transition-colors focus:outline-none">
+                        <lucide-icon [name]="hidePassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+                    </button>
+                </div>
+                <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                    class="text-red-400 text-[13px] mt-1.5 font-medium ml-1">
+                    Lozinka je obavezna.
+                </p>
+            </div>
+
+            <button 
+                type="submit" 
+                [disabled]="loginForm.invalid"
+                class="w-full bg-indigo-600 text-white p-3.5 rounded-xl font-bold hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:border-slate-700 border border-transparent disabled:cursor-not-allowed transition-all duration-300 shadow-lg shadow-indigo-900/20 active:scale-[0.98]"
+            > 
+                Pristupi Dashboardu
+            </button>
+
+            <div class="mt-8 pt-6 border-t border-slate-800 text-center">
+                <p class="text-sm text-slate-500">
+                    Nemaš korisnički račun?
+                    <a routerLink="/register" class="text-indigo-400 font-bold hover:text-indigo-300 transition ml-1">
+                        Kreiraj profil
+                    </a>
+                </p>
+            </div>
+        </form>
+
+        <footer class="text-center text-slate-600 text-[10px] mt-10 uppercase tracking-[0.2em]">
+            &copy; 2026 NullPointer Community
+        </footer>
+    </div>
 </div>

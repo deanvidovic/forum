@@ -2,10 +2,13 @@
 
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
 
 .animate-toast {
-backface-visibility: hidden;
-animation: toast-lifecycle 5s ease-in-out forwards;
+    backface-visibility: hidden;
+    animation: toast-lifecycle 2s ease-in-out forwards;
 }
 
 @keyframes toast-lifecycle {

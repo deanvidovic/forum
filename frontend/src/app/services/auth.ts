@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environment/environment';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 
 interface AuthResponse {
@@ -22,6 +22,7 @@ interface AuthResponse {
 
 export class Auth {
   private apiUrl = `${environment.apiUrl}/auth`;
+  
 
   constructor(private http: HttpClient) {}
 
@@ -39,9 +40,12 @@ export class Auth {
         if (res.user) {
           localStorage.setItem('user', JSON.stringify(res.user));
         }
+
+        window.dispatchEvent(new Event('userUpdated'));
       })
     )
   }
+
 
   logout() {
     localStorage.removeItem('token');

@@ -1,84 +1,109 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <form 
-        [formGroup]="registerForm" 
-        (ngSubmit)="onSubmit()"
-        class="bg-white p-6 rounded-xl shadow-md w-96"
-    >
-        <h2 class="text-2xl font-bold mb-4 text-center">Register</h2>
-
-        <input
-            type="text"
-            formControlName="username"
-            placeholder="Username"
-            class="w-full p-2 border border-gray-300 rounded mt-2 mb-2 outline-none focus:border-black focus:ring-0 transition-all"
-            [class.border-red-500]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
-        />
-        <p *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
-            class="text-red-500 text-sm">
-            Username is required.
-        </p>
-
-        <input
-            type="email"
-            formControlName="email"
-            placeholder="josh.rock@gmail.com"
-            class="w-full p-2 border border-gray-300 rounded mt-2 mb-2 outline-none focus:border-black focus:ring-0 transition-all"
-            [class.border-red-500]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-        />
-        <p *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-            class="text-red-500 text-sm">
-            Invalid e-mail address.
-        </p>
-
-        <div class="relative w-full">
-            <input
-                [type]="hidePassword ? 'password' : 'text'"
-                formControlName="password"
-                placeholder="Password"
-                class="w-full p-2 pr-10 border border-gray-300 rounded mt-2 mb-2 outline-none focus:border-black focus:ring-0 transition-all"
-                [class.border-red-500]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-            />
-            
-            <button type="button" (click)="hidePassword = !hidePassword" class="absolute right-3 top-[55%] -translate-y-1/2 text-gray-500 hover:text-black cursor-pointer focus:outline-none" >
-                <lucide-icon [name]="hidePassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
-            </button>
+<div class="min-h-screen flex items-center justify-center bg-[#0b0f1a] py-12 px-4 selection:bg-indigo-500/30">
+    <div class="max-w-md w-full">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-black text-white tracking-tighter">
+                &lt; Null<span class="text-indigo-500">Pointer</span> /&gt;
+            </h1>
         </div>
-        <p *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-            class="text-red-500 text-sm">
-            Password must be at least 8 characters.
-        </p>
 
-        <div class="relative w-full">
-            <input
-                [type]="hideRePassword ? 'password' : 'text'"
-                formControlName="repassword"
-                placeholder="Re-password"
-                class="w-full p-2 pr-10 border border-gray-300 rounded mt-2 mb-2 outline-none focus:border-black focus:ring-0 transition-all"
-                [class.border-red-500]="registerForm.get('repassword')?.invalid && registerForm.get('repassword')?.touched"
-            />
-            
-            <button type="button" (click)="hideRePassword = !hideRePassword" class="absolute right-3 top-[55%] -translate-y-1/2 text-gray-500 hover:text-black cursor-pointer focus:outline-none" >
-                <lucide-icon [name]="hideRePassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+        <form 
+            [formGroup]="registerForm" 
+            (ngSubmit)="onSubmit()"
+            class="bg-[#111827] p-8 rounded-2xl shadow-2xl border border-slate-800 relative overflow-hidden"
+        >
+            <div class="absolute -top-10 -right-10 w-24 h-24 bg-indigo-600/10 blur-3xl rounded-full"></div>
+
+            <h2 class="text-xl font-bold mb-6 text-white flex items-center gap-2">
+                <span class="w-1.5 h-5 bg-indigo-500 rounded-full"></span>
+                Registracija
+            </h2>
+
+            <div class="mb-4">
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Korisničko ime</label>
+                <input
+                    type="text"
+                    formControlName="username"
+                    placeholder="johndoe_dev"
+                    class="w-full p-3 bg-[#0b0f1a] border border-slate-700 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-slate-200 placeholder:text-slate-700"
+                    [class.border-red-500/50]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+                />
+                <p *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+                    class="text-red-400 text-[13px] mt-1 ml-1 font-medium italic">
+                    Korisničko ime je obavezno.
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Email adresa</label>
+                <input
+                    type="email"
+                    formControlName="email"
+                    placeholder="name@example.com"
+                    class="w-full p-3 bg-[#0b0f1a] border border-slate-700 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-slate-200 placeholder:text-slate-700"
+                    [class.border-red-500/50]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                />
+                <p *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                    class="text-red-400 text-[13px] mt-1 ml-1 font-medium italic">
+                    Unesite ispravan email.
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Lozinka</label>
+                <div class="relative w-full">
+                    <input
+                        [type]="hidePassword ? 'password' : 'text'"
+                        formControlName="password"
+                        placeholder="Min. 8 znakova"
+                        class="w-full p-3 pr-12 bg-[#0b0f1a] border border-slate-700 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-slate-200 placeholder:text-slate-700"
+                        [class.border-red-500/50]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                    />
+                    <button type="button" (click)="hidePassword = !hidePassword" 
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-indigo-400 transition-colors cursor-pointer">
+                        <lucide-icon [name]="hidePassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Potvrda lozinke</label>
+                <div class="relative w-full">
+                    <input
+                        [type]="hideRePassword ? 'password' : 'text'"
+                        formControlName="repassword"
+                        placeholder="Ponovi lozinku"
+                        class="w-full p-3 pr-12 bg-[#0b0f1a] border border-slate-700 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-slate-200 placeholder:text-slate-700"
+                        [class.border-red-500/50]="registerForm.get('repassword')?.invalid && registerForm.get('repassword')?.touched"
+                    />
+                    <button type="button" (click)="hideRePassword = !hideRePassword" 
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-indigo-400 transition-colors cursor-pointer">
+                        <lucide-icon [name]="hideRePassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+                    </button>
+                </div>
+                <p *ngIf="registerForm.get('repassword')?.hasError('passwordMismatch') && registerForm.get('repassword')?.touched"
+                    class="text-red-400 text-[13px] mt-1.5 ml-1 font-medium italic">
+                    Lozinke se ne podudaraju.
+                </p>
+            </div>
+
+            <button 
+                type="submit" 
+                [disabled]="registerForm.invalid"
+                class="w-full bg-indigo-600 text-white p-3.5 rounded-xl font-bold hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:border-slate-700 border border-transparent disabled:cursor-not-allowed transition-all duration-300 shadow-lg shadow-indigo-900/20 active:scale-[0.98] cursor-pointer"
+            > 
+                Kreiraj račun
             </button>
-        </div>
-        <p *ngIf="registerForm.get('repassword')?.hasError('passwordMismatch') && registerForm.get('repassword')?.touched"
-            class="text-red-500 text-sm">
-            Passwords do not match.
-        </p>
 
-        <button 
-            type="submit" 
-            [disabled]="registerForm.invalid"
-            class="w-full bg-blue-600 text-white p-2 rounded mt-2 hover:bg-blue-700 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
-        > 
-            Create Account
-        </button>
+            <p class="text-sm text-center mt-6 text-slate-500 font-medium">
+                Već imaš račun?
+                <a routerLink="/login" class="text-indigo-400 font-bold hover:text-indigo-300 transition cursor-pointer ml-1">
+                    Prijavi se
+                </a>
+            </p>
+        </form>
 
-        <p class="text-sm text-center mt-3">
-            Already have an account?
-            <a routerLink="/login" class="text-blue-600 underline cursor-pointer">
-                Log in
-            </a>
-        </p>
-    </form>
+        <footer class="text-center text-slate-600 text-[10px] mt-10 uppercase tracking-[0.2em]">
+            &copy; 2026 NullPointer
+        </footer>
+    </div>
 </div>

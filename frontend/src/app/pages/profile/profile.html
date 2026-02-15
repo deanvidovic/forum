@@ -1,0 +1,221 @@
+<div class="min-h-screen bg-[#0b0f1a] text-slate-300 font-sans selection:bg-indigo-500/30">
+
+  <div class="max-w-4xl mx-auto p-8">
+    
+    <div class="bg-[#111827] border border-slate-800 rounded-3xl p-8 mb-10 ring-1 ring-white/5 shadow-2xl">
+      <div class="flex flex-col md:flex-row items-center gap-8">
+        
+        <div class="relative group">
+          <div class="w-32 h-32 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-5xl font-black text-white shadow-2xl shadow-indigo-500/20 transition-transform group-hover:scale-105 uppercase">
+            {{ user?.username ? user.username[0] : '?' }}
+          </div>
+          <div class="absolute -bottom-2 -right-2 bg-emerald-500 w-6 h-6 rounded-full border-4 border-[#111827]"></div>
+        </div>
+
+        <div class="text-center md:text-left flex-1">
+          <h2 class="text-3xl font-black text-white tracking-tighter mb-1">
+            {{ user?.username }}
+          </h2>
+          
+          <p class="text-slate-500 text-sm mb-2 font-medium tracking-tight">
+            {{ user?.email }}
+          </p>
+
+          <p class="text-indigo-400 text-[10px] font-mono mb-4 uppercase tracking-[0.3em] font-bold">
+            {{ user?.role || 'User' }}
+          </p>
+
+          <div class="space-y-4">
+            <p class="text-slate-400 text-sm leading-relaxed max-w-md italic">
+              "{{ user?.bio || 'Nema dodane biografije.' }}"
+            </p>
+
+            <div *ngIf="user?.role !== 'admin'" class="flex flex-wrap justify-center md:justify-start gap-4">
+              <div class="bg-slate-800/30 px-5 py-3 rounded-2xl border border-slate-800">
+                <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest mb-1">Ukupno objava</p>
+                <p class="text-xl font-black text-white">{{ myThreads.length }}</p> 
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-3 w-full md:w-auto">
+          <button (click)="toggleEditModal(true)" class="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl text-xs font-black tracking-widest transition-all shadow-lg shadow-indigo-600/10 active:scale-95 uppercase cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            Uredi Profil
+          </button>
+          
+          <button (click)="onLogout()" class="flex items-center justify-center gap-2 bg-transparent hover:bg-red-500/10 text-red-500 border border-red-500/20 px-6 py-3 rounded-xl text-xs font-black tracking-widest transition-all active:scale-95 uppercase cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            Odjavi se
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="user?.role !== 'admin'" class="space-y-6">
+      <div class="flex items-center gap-8 border-b border-slate-800 px-2">
+        <button (click)="setActiveTab('my-threads')" 
+          [class.text-indigo-400]="activeTab === 'my-threads'"
+          [class.border-indigo-400]="activeTab === 'my-threads'"
+          class="pb-4 text-xs font-bold uppercase tracking-[0.2em] transition-all border-b-2 border-transparent cursor-pointer hover:text-white">
+          Moje Objave ({{ myThreads.length }})
+        </button>
+        <button (click)="setActiveTab('liked-threads')" 
+          [class.text-indigo-400]="activeTab === 'liked-threads'"
+          [class.border-indigo-400]="activeTab === 'liked-threads'"
+          class="pb-4 text-xs font-bold uppercase tracking-[0.2em] transition-all border-b-2 border-transparent cursor-pointer hover:text-white">
+          Oznaceno sa svida mi se ({{ likedThreads.length }})
+        </button>
+      </div>
+
+      <div class="min-h-[300px]">
+        <div *ngIf="loadingThreads" class="flex flex-col items-center justify-center py-20 gap-3">
+          <div class="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-[10px] font-mono text-slate-600 uppercase tracking-widest">Dohvaćanje podataka...</p>
+        </div>
+
+        <ng-container *ngIf="!loadingThreads">
+          <div class="grid gap-4">
+            <article *ngFor="let thread of (activeTab === 'my-threads' ? myThreads : likedThreads)" 
+                     [routerLink]="['/thread', thread.id]"
+                     class="bg-[#111827] border border-slate-800 hover:border-indigo-500/40 rounded-2xl p-6 transition-all group relative cursor-pointer">
+              
+              <div *ngIf="activeTab === 'my-threads'" class="absolute top-4 right-4 flex gap-2 z-20">
+                <button (click)="onEditThread($event, thread)" 
+                        class="p-2 text-slate-500 hover:text-indigo-400 hover:bg-indigo-400/10 rounded-xl transition-all cursor-pointer">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
+                </button>
+                <button (click)="onDeleteThread($event, thread.id)" 
+                        class="p-2 text-slate-500 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all cursor-pointer">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded uppercase font-bold tracking-tighter">
+                  {{ thread.category_name }}
+                </span>
+                <span class="text-[10px] text-slate-600">• {{ thread.created_at | timeAgo }}</span>
+              </div>
+
+              <h3 class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors mb-2">
+                {{ thread.title }}
+              </h3>
+              
+              <p class="text-sm text-slate-500 line-clamp-1 italic">
+                {{ thread.content }}
+              </p>
+
+              <div class="mt-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="w-5 h-5 rounded bg-indigo-600/20 flex items-center justify-center text-[8px] font-bold text-indigo-400 uppercase">
+                    {{ thread.username?.charAt(0) }}
+                  </div>
+                  <span class="text-[11px] text-slate-500">@{{ thread.username }}</span>
+                </div>
+                
+                <div class="flex items-center gap-1.5 text-rose-500/50 group-hover:text-rose-500 transition-colors">
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                  <span class="text-xs font-bold">{{ thread.likes_count || 0 }}</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div *ngIf="(activeTab === 'my-threads' ? myThreads : likedThreads).length === 0" 
+               class="opacity-40 italic text-sm text-center py-20 border-2 border-dashed border-slate-800 rounded-3xl font-mono">
+            &lt; system_log: Nema zapisa u kategoriji {{ activeTab }} /&gt;
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div *ngIf="user?.role === 'admin'" class="py-20 text-center border-2 border-dashed border-slate-800 rounded-[3rem]">
+      <div class="inline-block p-8 bg-emerald-500/5 rounded-full mb-4">
+        <svg class="w-12 h-12 text-emerald-500 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+      </div>
+      <h3 class="text-white font-black text-xl tracking-tight mb-2 uppercase">Administrator Mode</h3>
+
+      <div class="mt-6 flex justify-center">
+        <span class="px-4 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-mono uppercase tracking-[0.2em] rounded-full border border-emerald-500/20">
+          Status: Active & Secure
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="isEditModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div (click)="toggleEditModal(false)" class="absolute inset-0 bg-[#0b0f1a]/80 backdrop-blur-sm transition-opacity"></div>
+    <div class="relative w-full max-w-lg bg-[#111827] border border-slate-800 rounded-3xl p-8 shadow-2xl ring-1 ring-white/10">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h3 class="text-xl font-black text-white tracking-tight">Postavke Profila</h3>
+          <p class="text-[10px] text-slate-500 font-mono mt-1 uppercase tracking-widest">&lt; update_user_profile /&gt;</p>
+        </div>
+        <button (click)="toggleEditModal(false)" class="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-500 hover:text-white cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="space-y-6">
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Korisničko ime</label>
+          <input type="text" [(ngModel)]="editData.username" class="w-full bg-[#0b0f1a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">E-mail adresa</label>
+          <input type="email" [(ngModel)]="editData.email" class="w-full bg-[#0b0f1a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Biografija</label>
+          <textarea rows="4" [(ngModel)]="editData.bio" class="w-full bg-[#0b0f1a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all resize-none"></textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-10">
+        <button (click)="toggleEditModal(false)" class="flex-1 px-6 py-3 rounded-xl border border-slate-800 text-xs font-bold text-slate-500 hover:bg-slate-800 transition-all uppercase tracking-widest cursor-pointer">Odustani</button>
+        <button (click)="onSaveProfile()" class="flex-1 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg transition-all active:scale-[0.98] uppercase tracking-widest cursor-pointer">Spremi promjene</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isEditThreadModalOpen" class="fixed inset-0 z-[110] flex items-center justify-center p-4">
+    <div (click)="isEditThreadModalOpen = false" class="absolute inset-0 bg-[#0b0f1a]/90 backdrop-blur-md transition-opacity"></div>
+    <div class="relative w-full max-w-xl bg-[#111827] border border-slate-800 rounded-3xl p-8 shadow-2xl ring-1 ring-white/10">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h3 class="text-xl font-black text-white tracking-tight">Uredi Objavu</h3>
+          <p class="text-[10px] text-slate-500 font-mono mt-1 uppercase tracking-widest">&lt; patch_thread_content /&gt;</p>
+        </div>
+        <button (click)="isEditThreadModalOpen = false" class="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-500 hover:text-white cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="space-y-6">
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Naslov objave</label>
+          <input type="text" [(ngModel)]="editThreadData.title" class="w-full bg-[#0b0f1a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Sadržaj</label>
+          <textarea rows="8" [(ngModel)]="editThreadData.content" class="w-full bg-[#0b0f1a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all resize-none"></textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-10">
+        <button (click)="isEditThreadModalOpen = false" class="flex-1 px-6 py-3 rounded-xl border border-slate-800 text-xs font-bold text-slate-500 hover:bg-slate-800 transition-all uppercase tracking-widest cursor-pointer">Odustani</button>
+        <button (click)="onSaveThreadEdit()" class="flex-1 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg transition-all active:scale-[0.98] uppercase tracking-widest cursor-pointer">Spremi</button>
+      </div>
+    </div>
+  </div>
+
+</div>
