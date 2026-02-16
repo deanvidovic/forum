@@ -1,29 +1,32 @@
 ## 🛠️ Instalacija i Pokretanje
 
 ### 1. Preduvjeti
-Provjerite imate li instalirane:
+Provjerite imate li instalirane sljedece alate:
 - [Node.js](https://nodejs.org/)
 - [PostgreSQL](https://www.postgresql.org/)
 
 ### 2. Backend Setup
-Na putanji ``forum/backend``:
+Navigirajte u mapu ``forum/backend`` i instalirajte potrebne pakete:
 ```bash
 npm install
 ```
 
+### 3. Konfiguracija baze podataka
+- **Instalacija**: [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- **Lozinka**: Prilikom instalacije postavite lozinku za korisnika ``postgres``. Tu lozinku kasnije upisati u ``.env`` datoteku.
+- **Environment Variables**: Kako biste koristili PostgreSQL iz terminala, dodajte putanju ``C:\Program Files\PostgreSQL\<verzija>\bin`` u sistemsku ``PATH`` varijablu (detaljne upute pogledajte u ovom [videu](https://www.youtube.com/watch?v=D3YzLLo34ZU&t=3s)).
 
-### 3. Kreirajte bazu
-- [pgAdmin4](https://www.pgadmin.org/download/)
+### 4. Kreiranje baze:
+- Otvorite pgAdmin4 i kreirajte novu bazu podataka pod nazivom ``forum``
+- Unutar baze izvrsite prilozenu skriptu ``script.sql`` kako biste generirali tablice.
 
-Instalirajte pgAdmin4 s navedenog izvora.
-Nakon instalacije kreirajte bazu naziva ``forum`` te pokrenete ``export.sql``.
+Nakon pokretanja, mozete se prijaviti s administratorskim racunom:
+- E-mail: ``admin@admin.com``
+- Lozinka: ``Admin123!``
+- Kao administrator imate ovlasti kreirati nove obicne korisnike
 
-Jedini user u tom export-u je admin: 
-- email: ``admin@admin.com``
-- password: ``Admin123!``
-- nakon login-a s admin account-om imate mogucnost kreiranja obicnog user-a
-
-### 4. kreirajte .env datoteku
+### 5. Konfiguracija okruzenja (.env)
+U mapi ``forum/backend`` kreirajte datoteku ``.env`` i prilagodite sljedece parametre:
 ```bash
 SERVER_PORT=3000
 DB_USERNAME=vas_username
@@ -34,16 +37,19 @@ DB_PORT=5432
 JWT_SECRET=vasa_tajna_sifra (moze biti bilo koji string)
 ```
 
-### 5. Pokrenite backend
+### 6. Pokretanje backend-a
+Unutar mape forum/backend pokrenite posluzitelj:
 ```bash
-npm run dev (ako je podesen nodemon)
-node app.js (ako prva komanda ne radi)
+npm run dev      # Pokretanje uz nodemon
+node app.js      # Alternativno pokretanje ako prva naredba ne radi
 ```
 
 
-### 6. Frontend setup
-Na putanji ``forum/frontend``:
+### 6. Postavljanje Frontenda
+Navigirajte u mapu ``forum/frontend``, instalirajte ovisnosti i pokrenite Angular aplikaciju:
 ```bash
 npm install
 ng serve
 ```
+
+Aplikacija ce biti dostupna na adresi ``http://localhost:4200``.
