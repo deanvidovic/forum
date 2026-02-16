@@ -1,7 +1,6 @@
 const db = require('../../db');
 const { isValidEmail, getPasswordErrors } = require('../../utils/authValidator');
 
-// register validation
 
 const validateRegister = (req, res, next) => {
     const { username, email, password } = req.body;
@@ -67,7 +66,6 @@ const isUserUnique = async (req, res, next) => {
     }
 };
 
-// login validation
 
 const validateLogin = (req, res, next) => {
     const { email, password } = req.body;

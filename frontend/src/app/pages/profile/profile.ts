@@ -13,18 +13,18 @@ export class Profile implements OnInit {
   isEditModalOpen: boolean = false;
   isEditThreadModalOpen: boolean = false;
   user: any = null;
-  
+
   activeTab: 'my-threads' | 'liked-threads' = 'my-threads';
   myThreads: any[] = [];
   likedThreads: any[] = [];
   loadingThreads: boolean = false;
-  
+
   editData = { username: '', email: '', bio: '' };
   editThreadData = { id: null, title: '', content: '' };
 
   constructor(
-    private dialog: Dialog, 
-    private router: Router, 
+    private dialog: Dialog,
+    private router: Router,
     private profileService: ProfileService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -68,6 +68,7 @@ export class Profile implements OnInit {
         const msg = err.error?.message || "Greška pri ažuriranju.";
         this.dialog.show(msg, "Error");
         this.cdr.detectChanges();
+        console.log(err);
       }
     });
   }
@@ -142,8 +143,8 @@ export class Profile implements OnInit {
     this.loadingThreads = true;
     this.cdr.detectChanges();
 
-    const obs = this.activeTab === 'my-threads' 
-      ? this.profileService.getUserThreads(this.user.id) 
+    const obs = this.activeTab === 'my-threads'
+      ? this.profileService.getUserThreads(this.user.id)
       : this.profileService.getLikedThreads(this.user.id);
 
     obs.subscribe({
@@ -168,7 +169,7 @@ export class Profile implements OnInit {
 
   toggleEditModal(isOpen: boolean) {
     this.isEditModalOpen = isOpen;
-    if (!isOpen) this.syncEditData(); 
+    if (!isOpen) this.syncEditData();
     this.cdr.detectChanges();
   }
 
@@ -176,6 +177,6 @@ export class Profile implements OnInit {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     window.dispatchEvent(new Event('userUpdated'));
-    this.router.navigate(['/login']); 
+    this.router.navigate(['/login']);
   }
 }

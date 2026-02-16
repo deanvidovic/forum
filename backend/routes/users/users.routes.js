@@ -5,6 +5,6 @@ const { updateUser, adminAddUser } = require('../../controllers/users/users.cont
 const { verifyToken } = require('../../middlewares/auth/token.validation');
 
 router.post("/admin/create", verifyToken, adminAddUser);
-router.put("/:id", verifyToken, updateUser);
+router.put("/users/:id", verifyToken, updateUser);
 
 module.exports = router;

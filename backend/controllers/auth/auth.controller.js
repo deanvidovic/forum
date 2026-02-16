@@ -34,7 +34,7 @@ const login = async (req, res) => {
             {
                 id: user.id,
                 username: user.username,
-                email: user.email, // Koristimo email iz baze
+                email: user.email,
                 role: user.role
             },
             process.env.JWT_SECRET,

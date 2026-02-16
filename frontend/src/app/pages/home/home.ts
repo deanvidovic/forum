@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Dodaj ovo
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Category } from '../../services/category';
 import { Threads } from '../../services/threads';
 import { Dialog } from '../../services/dialog';
@@ -26,21 +26,20 @@ export class Home implements OnInit {
   adminForm: FormGroup;
   isAdminModalOpen: boolean = false;
 
-  newThread = { 
-    title: '', 
-    content: '', 
-    categoryId: null as number | null 
+  newThread = {
+    title: '',
+    content: '',
+    categoryId: null as number | null
   };
 
   constructor(
     private fb: FormBuilder,
-    private categoryService: Category, 
-    private threadService: Threads, 
+    private categoryService: Category,
+    private threadService: Threads,
     private profileService: ProfileService,
     private dialog: Dialog,
     private cdr: ChangeDetectorRef
   ) {
-    // Inicijalizacija admin forme s istim validatorima kao na register
     this.adminForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
@@ -57,8 +56,6 @@ export class Home implements OnInit {
     }
     this.loadData();
   }
-
-  // --- ADMIN LOGIKA ---
 
   toggleAdminModal(open: boolean) {
     this.isAdminModalOpen = open;
@@ -155,7 +152,7 @@ export class Home implements OnInit {
         next: () => {
           this.dialog.show('Uspješno dodan thread!', 'Success');
           this.resetForm();
-          this.loadData(); 
+          this.loadData();
         },
         error: (err) => this.dialog.show("Greška pri objavi.", 'Error')
       });
@@ -178,8 +175,8 @@ export class Home implements OnInit {
 
   onDeleteThread(event: Event, threadId: number) {
     event.stopPropagation();
-    const confirmMsg = this.user?.role === 'admin' 
-      ? 'ADMIN: Jeste li sigurni da želite trajno ukloniti ovu objavu?' 
+    const confirmMsg = this.user?.role === 'admin'
+      ? 'ADMIN: Jeste li sigurni da želite trajno ukloniti ovu objavu?'
       : 'Jesi li siguran da želiš obrisati svoju objavu?';
     if (confirm(confirmMsg)) {
       this.threadService.deleteThread(threadId).subscribe({
@@ -203,7 +200,7 @@ export class Home implements OnInit {
   selectCategory(cat: any) {
     this.selectedCategoryName = cat.name;
     this.newThread.categoryId = cat.id;
-    this.categoriesSelectionDropdownOpen = false; 
+    this.categoriesSelectionDropdownOpen = false;
   }
 
   toggleDropdown() {

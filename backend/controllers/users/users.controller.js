@@ -2,9 +2,6 @@ const db = require('../../db');
 const bcrypt = require('bcrypt');
 const { getPasswordErrors, isValidEmail } = require('../../utils/authValidator'); // Uvoz tvojih validatora
 
-/**
- * Ažuriranje profila (Korisnik sam sebe)
- */
 const updateUser = async (req, res) => {
     const { id } = req.params;
     let { username, email, bio } = req.body;
@@ -18,12 +15,10 @@ const updateUser = async (req, res) => {
         return res.status(403).json({ message: "Nemate dozvolu za ovu akciju." });
     }
 
-    // Provjera username-a
     if (username !== undefined && username.trim().length < 3) {
         return res.status(400).json({ message: "Korisničko ime mora imati barem 3 znaka." });
     }
 
-    // Provjera email-a koristeći tvoj isValidEmail
     if (email !== undefined && !isValidEmail(email.trim())) {
         return res.status(400).json({ message: "Neispravan format e-mail adrese." });
     }

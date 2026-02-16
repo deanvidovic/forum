@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environment/environment';
-import { Observable, tap } from 'rxjs';
+import { tap } from 'rxjs';
 
 
 interface AuthResponse {
@@ -22,7 +22,7 @@ interface AuthResponse {
 
 export class Auth {
   private apiUrl = `${environment.apiUrl}/auth`;
-  
+
 
   constructor(private http: HttpClient) {}
 
